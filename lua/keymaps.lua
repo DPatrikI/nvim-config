@@ -24,6 +24,19 @@ end)
 vim.keymap.set('t', '<Esc>', [[<C-\><C-n>]])
 vim.keymap.set('n', '<leader>tt', 'terminal<CR>')
 vim.keymap.set('n', '<leader>tv', ':vsplit<CR><C-w>l | :terminal<CR>')
+-- These set the local working directory to be the same as the one it is being opened from
+vim.keymap.set("n", "<leader>Tt", function()
+  local dir = vim.fn.expand("%:p:h") -- gets the current file's directory
+  vim.cmd("terminal")
+  vim.cmd("lcd " .. dir) -- change local directory *after* opening terminal
+end, { desc = "Vertical Terminal (cwd = current file)" })
+vim.keymap.set("n", "<leader>Tv", function()
+  local dir = vim.fn.expand("%:p:h") -- gets the current file's directory
+  vim.cmd("vsplit")
+  vim.cmd("wincmd l")
+  vim.cmd("terminal")
+  vim.cmd("lcd " .. dir) -- change local directory *after* opening terminal
+end, { desc = "Vertical Terminal (cwd = current file)" })
 
 -- BUFFERS
 -- List all buffers via Telescope

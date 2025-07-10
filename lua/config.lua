@@ -31,7 +31,11 @@ require("lazy").setup({
 	},
 
 	-- Treesitter for syntax highlighting
-	{ "nvim-treesitter/nvim-treesitter", build = ":TSUpdate" },
+	{ "nvim-treesitter/nvim-treesitter", build = ":TSUpdate",
+		config = function()
+			require("plugins.treesitter-context")
+		end,
+	},
 
 	-- Fuzzy finder
 	{
