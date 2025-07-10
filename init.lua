@@ -16,6 +16,7 @@ vim.opt.termguicolors = true
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 
+require("lsp.handlers")
 require("config")
 require("lazy").setup("plugins")
 require("keymaps")
@@ -30,3 +31,12 @@ vim.opt.smartcase = true
 vim.opt.updatetime = 250
 vim.opt.signcolumn = 'yes'
 vim.opt.scrolloff = 10
+vim.opt.hlsearch = false
+
+local on_attach = require("lsp.on_attach").setup
+
+vim.api.nvim_create_autocmd("LspAttach", {
+  callback = function(ev)
+    on_attach(nil, ev.buf)     -- client is ev.data.client_id if you need it
+  end,
+})

@@ -3,8 +3,18 @@ vim.opt.rtp:prepend("~/.local/share/nvim/lazy/lazy.nvim")
 
 require("lazy").setup({
 	-- LSP manager
-	{ "williamboman/mason.nvim",           config = true },
-	{ "williamboman/mason-lspconfig.nvim", config = true },
+	{
+	  "williamboman/mason.nvim",
+	  build = ":MasonUpdate",   -- keeps registry fresh
+	  config = true,
+	},
+	{
+	  "williamboman/mason-lspconfig.nvim",
+	  opts = {
+	    ensure_installed = { "vtsls" },   --  ← installs the JS/TS LS
+	    automatic_installation = false,
+	  },
+	},
 
 	{ "folke/persistence.nvim",
 		event = "BufReadPre",
@@ -20,9 +30,6 @@ require("lazy").setup({
 		ft = { "gd", "gdscript" },
 	},
 
-	-- Autocompletion engine
-	{ "hrsh7th/nvim-cmp" },
-
 	-- Treesitter for syntax highlighting
 	{ "nvim-treesitter/nvim-treesitter", build = ":TSUpdate" },
 
@@ -35,8 +42,53 @@ require("lazy").setup({
 	-- Git integration
 	{ "lewis6991/gitsigns.nvim" },
 
+
+	-- Comment : gcc -> single line, gc in visual -> selection
+	{
+	  "numToStr/Comment.nvim",
+	  config = function()
+	    require("Comment").setup({
+	      toggler = {
+		line = "gc",     -- replace "gcc" with "gc"
+		block = "gb",    -- block comment
+	      },
+	      opleader = {
+		line = "gc",     -- use gc in visual mode
+		block = "gb",
+	      },
+	      -- Optional: if you want to disable `gcc` entirely
+	      mappings = {
+		basic = true,    -- enables gc, gb
+		extra = false,   -- disables gco, gcO, gcA
+	      },
+	    })
+	  end,
+	},
+
 	-- File Tree
-	{ "nvim-tree/nvim-tree.lua", dependencies = { "nvim-tree/nvim-web-devicons" }, config = true },
+	{
+	  "nvim-tree/nvim-tree.lua",
+	  dependencies = { "nvim-tree/nvim-web-devicons" },
+	  config = function()
+	    require("nvim-tree").setup({
+	      view = {
+		width = 70, -- Set your preferred width here
+	      },
+	 --      update_focused_file = {
+		-- enable = true,
+		-- update_root = false, -- optional: set to true if you want to change root dir
+		-- ignore_list = {},
+	 --      },
+	 --      actions = {
+		-- change_dir = {
+		--   enable = true,
+		--   global = false,
+		--   restrict_above_cwd = false,
+		-- },
+	 --      },
+	    })
+	  end,
+	},
 
 	-- Theme
 
@@ -105,8 +157,12 @@ require("telescope").setup({
 })
 
 local lspconfig    = require("lspconfig")
+vim.lsp.handlers["textDocument/definition"] =
+  vim.lsp.with(vim.lsp.handlers["textDocument/definition"], { reuse_win = true })
 local capabilities = require("cmp_nvim_lsp").default_capabilities()
 
+
+-- GDScript
 lspconfig.gdscript.setup({
 	name         = "godot",
 	cmd          = vim.lsp.rpc.connect("127.0.0.1", 6005), -- Unix/Mac; on Windows keep your ncat fallback
@@ -132,3 +188,15 @@ vim.filetype.add({
 		gd = "gdscript",
 	},
 })
+
+-- TypeScript
+-- shared on_attach (reuse your Godot key-maps)
+local on_attach = function(_, bufnr)
+  local map = function(lhs, rhs) vim.keymap.set("n", lhs, rhs, { buffer = bufnr }) end
+  map("gd", vim.lsp.buf.definition)
+  map("gD", function() vim.cmd("vsplit"); vim.lsp.buf.definition() end)
+  map("gi", vim.lsp.buf.implementation)
+  map("gr", vim.lsp.buf.references)
+  map("K",  vim.lsp.buf.hover)
+end
+

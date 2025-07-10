@@ -19,7 +19,6 @@ return {
           "prettierd",
           "pyright",
           "trivy",
-          "typescript-language-server",  -- ts_ls
           "typos-lsp",                   -- typos_lsp
           "yaml-language-server",        -- yamlls
         },

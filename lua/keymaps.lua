@@ -3,12 +3,19 @@ vim.keymap.set({ "n", "v" }, "<leader>qq", ":q<CR>")
 vim.keymap.set({ "n", "v" }, "<leader>vc", ":e ~/.config/nvim/lua/config.lua<CR>")
 vim.keymap.set({ "n", "v" }, "<leader>vk", ":e ~/.config/nvim/lua/keymaps.lua<CR>")
 vim.keymap.set({ "n", "v" }, "<leader>vi", ":e ~/.config/nvim/init.lua<CR>")
+vim.keymap.set({ "n", "v" }, "<leader>vv", ":e ~/.config/nvim<CR>")
 
 vim.keymap.set({ "n", "v", "i" }, "<D-c>", '"+y')
 vim.keymap.set({ "n", "v", "i" }, "<D-v>", '"+p')
 vim.keymap.set({ "n" }, "<leader>fp", ":Telescope find_files<CR>")
 vim.keymap.set({ "n" }, "<leader>ff", ":Telescope live_grep<CR>")
-vim.keymap.set({ "n" }, "<leader>e", ":NvimTreeToggle<CR>")
+
+-- NvimTree
+vim.keymap.set({ "n" }, "<leader>ee", ":NvimTreeToggle<CR>")
+vim.keymap.set("n", "<leader>eg", function()
+  require("nvim-tree.api").tree.find_file({ open = true, focus = true })
+end, { desc = "Reveal current file in NvimTree" })
+
 vim.keymap.set("n", "<leader>ii", function()
 	vim.lsp.buf.format({ async = true })
 end)
@@ -25,7 +32,7 @@ vim.keymap.set("n", "<leader>bl", ":Telescope buffers<CR>")
 vim.keymap.set("n", "<leader>bn", ":bnext<CR>")
 vim.keymap.set("n", "<leader>bp", ":bprevious<CR>")
 -- Delete (close) current buffer
-vim.keymap.set("n", "<leader>bd", ":bd<CR>")
+vim.keymap.set("n", "<leader>bd", ":bd!<CR>")
 -- Delete all but current
 vim.keymap.set("n", "<leader>bD", ":%bd|e#|bd#<CR>")
 
@@ -40,6 +47,8 @@ vim.keymap.set("n", "<leader>ws", ":split<CR><C-w>j")
 vim.keymap.set("n", "<leader>wv", ":vsplit<CR><C-w>l")
 -- Close window
 vim.keymap.set("n", "<leader>wd", ":close<CR>")
+-- Equalize window sizes
+vim.keymap.set("n", "<leader>w=", "<C-w>=w")
 -- Navigate between windows
 vim.keymap.set("n", "<C-h>", "<C-w>h")
 vim.keymap.set("n", "<C-l>", "<C-w>l")
