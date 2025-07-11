@@ -31,13 +31,26 @@ require("lazy").setup({
 		ft = { "gd", "gdscript" },
 	},
 
-	-- Treesitter for syntax highlighting
+	-- ── Treesitter for syntax highlighting ──────────────────────────────
 	{
-		"nvim-treesitter/nvim-treesitter",
-		build = ":TSUpdate",
-		config = function()
-			require("plugins.treesitter-context")
-		end,
+	  "nvim-treesitter/nvim-treesitter",
+	  build = ":TSUpdate",
+	  config = function()
+	    require("nvim-treesitter.configs").setup({
+	      -- parsers you actually use
+	      ensure_installed = { "lua", "typescript", "javascript", "tsx", "html", "css", "gdscript", "gdshader", "json", "yaml", "markdown" },
+	      highlight = { enable = true },
+	      indent    = { enable = true },
+	    })
+	  end,
+	},
+	-- Sticky context for Treesitter
+	{
+	  "nvim-treesitter/nvim-treesitter-context",
+	  dependencies = { "nvim-treesitter/nvim-treesitter" },
+	  config = function()
+	    require("plugins.treesitter-context")()   
+	  end,
 	},
 
 	-- Fuzzy finder
@@ -79,7 +92,9 @@ require("lazy").setup({
 		config = function()
 			require("nvim-tree").setup({
 				view = {
-					width = 70, -- Set your preferred width here
+					width = 70, 
+					number = true,
+					relativenumber = true,
 				},
 				--      update_focused_file = {
 				-- enable = true,
