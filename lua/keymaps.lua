@@ -1,4 +1,4 @@
-vim.keymap.set({ "n", "v" }, "<leader>w", ":w<CR>")
+vim.keymap.set({ "n", "v" }, "<leader>s", ":w<CR>")
 vim.keymap.set({ "n", "v" }, "<leader>qq", ":q<CR>")
 vim.keymap.set({ "n", "v" }, "<leader>vc", ":e ~/.config/nvim/lua/config.lua<CR>")
 vim.keymap.set({ "n", "v" }, "<leader>vk", ":e ~/.config/nvim/lua/keymaps.lua<CR>")
