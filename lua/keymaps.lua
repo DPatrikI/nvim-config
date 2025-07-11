@@ -99,3 +99,8 @@ vim.g.copilot_no_tab_map = true
 
 -- Diagnostics
 vim.keymap.set("n", "<leader>k", vim.diagnostic.open_float, { desc = "Open Diagnostics Float" })
+
+-- Rename symbol under cursor
+vim.keymap.set("n", "<leader>rn", function()
+	vim.lsp.buf.rename()
+end, { desc = "Rename Symbol Under Cursor" })
