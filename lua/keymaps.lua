@@ -1,4 +1,4 @@
-vim.keymap.set({ "n", "v" }, "<leader>s", ":w<CR>")
+vim.keymap.set({ "n", "v" }, "<leader>w", ":w<CR>")
 vim.keymap.set({ "n", "v" }, "<leader>qq", ":q<CR>")
 vim.keymap.set({ "n", "v" }, "<leader>vc", ":e ~/.config/nvim/lua/config.lua<CR>")
 vim.keymap.set({ "n", "v" }, "<leader>vk", ":e ~/.config/nvim/lua/keymaps.lua<CR>")
@@ -22,7 +22,7 @@ end)
 
 -- Terminal
 vim.keymap.set('t', '<Esc>', [[<C-\><C-n>]])
-vim.keymap.set('n', '<leader>tt', 'terminal<CR>')
+vim.keymap.set('n', '<leader>tt', ':terminal<CR>')
 vim.keymap.set('n', '<leader>tv', ':vsplit<CR><C-w>l | :terminal<CR>')
 -- These set the local working directory to be the same as the one it is being opened from
 vim.keymap.set("n", "<leader>Tt", function()
@@ -96,3 +96,6 @@ vim.keymap.set('i', '<M-Tab>', 'copilot#Accept("\\<CR>")', {
 	replace_keycodes = false
 })
 vim.g.copilot_no_tab_map = true
+
+-- Diagnostics
+vim.keymap.set("n", "<leader>k", vim.diagnostic.open_float, { desc = "Open Diagnostics Float" })
