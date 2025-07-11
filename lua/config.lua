@@ -33,24 +33,24 @@ require("lazy").setup({
 
 	-- ── Treesitter for syntax highlighting ──────────────────────────────
 	{
-	  "nvim-treesitter/nvim-treesitter",
-	  build = ":TSUpdate",
-	  config = function()
-	    require("nvim-treesitter.configs").setup({
-	      -- parsers you actually use
-	      ensure_installed = { "lua", "typescript", "javascript", "tsx", "html", "css", "gdscript", "gdshader", "json", "yaml", "markdown" },
-	      highlight = { enable = true },
-	      indent    = { enable = true },
-	    })
-	  end,
+		"nvim-treesitter/nvim-treesitter",
+		build = ":TSUpdate",
+		config = function()
+			require("nvim-treesitter.configs").setup({
+				-- parsers you actually use
+				ensure_installed = { "lua", "typescript", "javascript", "tsx", "html", "css", "gdscript", "gdshader", "json", "yaml", "markdown" },
+				highlight        = { enable = true },
+				indent           = { enable = true },
+			})
+		end,
 	},
 	-- Sticky context for Treesitter
 	{
-	  "nvim-treesitter/nvim-treesitter-context",
-	  dependencies = { "nvim-treesitter/nvim-treesitter" },
-	  config = function()
-	    require("plugins.treesitter-context")()   
-	  end,
+		"nvim-treesitter/nvim-treesitter-context",
+		dependencies = { "nvim-treesitter/nvim-treesitter" },
+		config = function()
+			require("plugins.treesitter-context")()
+		end,
 	},
 
 	-- Fuzzy finder
@@ -92,7 +92,7 @@ require("lazy").setup({
 		config = function()
 			require("nvim-tree").setup({
 				view = {
-					width = 70, 
+					width = 70,
 					number = true,
 					relativenumber = true,
 				},
@@ -165,8 +165,19 @@ require("lazy").setup({
 	},
 
 	{
-			  "github/copilot.vim",
-			  event = "InsertEnter",
+		"github/copilot.vim",
+		event = "InsertEnter",
+	},
+	{
+		"RRethy/vim-illuminate",
+		config = function()
+			require("illuminate").configure({
+				delay = 200, -- ms before highlighting
+				large_file_cutoff = 2000,
+				under_cursor = true,
+				filetypes_denylist = { "NvimTree", "TelescopePrompt" },
+			})
+		end
 	}
 })
 
