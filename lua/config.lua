@@ -183,6 +183,7 @@ require("lazy").setup({
 
 require("telescope").setup({
 	defaults = {
+		path_display = { "smart" },
 		mappings = {
 			i = {
 				["<c-d>"] = require("telescope.actions").delete_buffer,
