@@ -69,6 +69,13 @@ vim.keymap.set("n", "<C-l>", "<C-w>l")
 vim.keymap.set("n", "<C-j>", "<C-w>j")
 vim.keymap.set("n", "<C-k>", "<C-w>k")
 
+-- TABS
+vim.keymap.set("n", "<leader>tn", ":tabnew<CR>", { desc = "New Tab" })
+vim.keymap.set("n", "<leader>tc", ":tabclose<CR>", { desc = "Close Tab" })
+vim.keymap.set("n", "<leader>to", ":tabonly<CR>", { desc = "Only this Tab" })
+vim.keymap.set("n", "<leader>tl", "gt", { desc = "Next Tab" })
+vim.keymap.set("n", "<leader>th", "gT", { desc = "Previous Tab" })
+
 vim.keymap.set("n", "<leader>gd", function()
 	local word = vim.fn.expand("<cword>")
 	require("telescope.builtin").grep_string({
