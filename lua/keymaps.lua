@@ -70,11 +70,11 @@ vim.keymap.set("n", "<C-j>", "<C-w>j")
 vim.keymap.set("n", "<C-k>", "<C-w>k")
 
 -- TABS
-vim.keymap.set("n", "<leader>tn", ":tabnew<CR>", { desc = "New Tab" })
-vim.keymap.set("n", "<leader>tc", ":tabclose<CR>", { desc = "Close Tab" })
-vim.keymap.set("n", "<leader>to", ":tabonly<CR>", { desc = "Only this Tab" })
-vim.keymap.set("n", "<leader>tl", "gt", { desc = "Next Tab" })
-vim.keymap.set("n", "<leader>th", "gT", { desc = "Previous Tab" })
+vim.keymap.set("n", "tn", ":tabnew<CR>", { desc = "New Tab" })
+vim.keymap.set("n", "tc", ":tabclose<CR>", { desc = "Close Tab" })
+vim.keymap.set("n", "to", ":tabonly<CR>", { desc = "Only this Tab" })
+vim.keymap.set("n", "tl", "gt", { desc = "Next Tab" })
+vim.keymap.set("n", "th", "gT", { desc = "Previous Tab" })
 
 vim.keymap.set("n", "<leader>gd", function()
 	local word = vim.fn.expand("<cword>")
@@ -111,3 +111,5 @@ vim.keymap.set("n", "<leader>k", vim.diagnostic.open_float, { desc = "Open Diagn
 vim.keymap.set("n", "<leader>rn", function()
 	vim.lsp.buf.rename()
 end, { desc = "Rename Symbol Under Cursor" })
+
+vim.keymap.set("n", "<leader>ca", vim.lsp.buf.code_action, { desc = "LSP Code Action" })
