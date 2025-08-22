@@ -36,6 +36,7 @@ vim.opt.tabstop = 2        -- number of spaces that a <Tab> in the file counts f
 vim.opt.shiftwidth = 2     -- number of spaces to use for each step of (auto)indent
 vim.opt.expandtab = false  -- convert tabs to spaces
 vim.opt.smartindent = true -- smart autoindenting when starting a new line
+vim.o.winbar = "%f" 		-- show file path in the window bar
 
 local on_attach = require("lsp.on_attach").setup
 
