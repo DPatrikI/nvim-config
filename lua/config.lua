@@ -58,6 +58,10 @@ require("lazy").setup({
 		"nvim-telescope/telescope.nvim",
 		dependencies = { "nvim-lua/plenary.nvim" },
 	},
+	{
+		"nvim-telescope/telescope-live-grep-args.nvim",
+		dependencies = { "nvim-telescope/telescope.nvim" },
+	},
 
 	-- Git integration
 	{ "lewis6991/gitsigns.nvim" },
@@ -182,18 +186,20 @@ require("lazy").setup({
 })
 
 require("telescope").setup({
-	defaults = {
-		path_display = { "smart" },
-		mappings = {
-			i = {
-				["<c-d>"] = require("telescope.actions").delete_buffer,
-			},
-			n = {
-				["<c-d>"] = require("telescope.actions").delete_buffer,
-			},
-		},
-	},
+  defaults = {
+    path_display = { "smart" },
+    mappings = {
+      i = { ["<c-d>"] = require("telescope.actions").delete_buffer, },
+      n = { ["<c-d>"] = require("telescope.actions").delete_buffer, },
+    },
+  },
+  extensions = {
+    live_grep_args = {
+      auto_quoting = true,  -- lets you type spaces in the query; args (-g/--glob) still pass through
+    },
+  },
 })
+require("telescope").load_extension("live_grep_args")
 
 local lspconfig                             = require("lspconfig")
 vim.lsp.handlers["textDocument/definition"] =
@@ -231,12 +237,65 @@ vim.filetype.add({
 -- TypeScript
 -- shared on_attach (reuse your Godot key-maps)
 local on_attach = function(_, bufnr)
-	local map = function(lhs, rhs) vim.keymap.set("n", lhs, rhs, { buffer = bufnr }) end
-	map("gd", vim.lsp.buf.definition)
-	map("gD", function()
-		vim.cmd("vsplit"); vim.lsp.buf.definition()
-	end)
-	map("gi", vim.lsp.buf.implementation)
-	map("gr", vim.lsp.buf.references)
-	map("K", vim.lsp.buf.hover)
+  local map = function(lhs, rhs) vim.keymap.set("n", lhs, rhs, { buffer = bufnr }) end
+
+  local function to_buf_and_pos(win, uri, pos)
+    local bufnr = vim.uri_to_bufnr(uri)
+    if not vim.api.nvim_buf_is_loaded(bufnr) then vim.fn.bufload(bufnr) end
+    vim.api.nvim_set_current_win(win)
+    vim.api.nvim_win_set_buf(win, bufnr)
+    -- LSP positions are 0-based
+    vim.api.nvim_win_set_cursor(win, { pos.line + 1, pos.character })
+    -- open folds at cursor
+    vim.cmd("normal! zv")
+    -- force cursor line to be the top line, regardless of any centering plugins
+    local view = vim.fn.winsaveview()
+    view.topline = vim.api.nvim_win_get_cursor(win)[1]
+    vim.fn.winrestview(view)
+  end
+
+  local function jump_definition(opts)
+    local vsplit = opts and opts.vsplit
+    local curwin = vim.api.nvim_get_current_win()
+    local target_win = curwin
+    if vsplit then
+      vim.cmd("vsplit")
+      target_win = vim.api.nvim_get_current_win()
+    end
+
+    local params = vim.lsp.util.make_position_params()
+    vim.lsp.buf_request(0, "textDocument/definition", params, function(err, result)
+      if err then return end
+      if not result or (type(result) == "table" and vim.tbl_isempty(result)) then return end
+
+      -- If multiple results, open quickfix like the default behavior and stop.
+      local results = result
+      if not vim.tbl_islist(results) then results = { results } end
+      if #results > 1 then
+        local items = vim.lsp.util.locations_to_items(results, 0)
+        if items and #items > 0 then
+          vim.fn.setqflist({}, " ", { items = items, title = "LSP Definitions" })
+          vim.cmd("copen")
+        end
+        return
+      end
+
+      -- Single location or locationLink
+      local loc = results[1]
+      if loc.targetUri then
+        -- LocationLink
+        to_buf_and_pos(target_win, loc.targetUri, loc.targetSelectionRange.start or loc.targetRange.start)
+      else
+        -- Location
+        to_buf_and_pos(target_win, loc.uri, loc.range.start)
+      end
+    end)
+  end
+
+  map("gd", function() jump_definition() end)
+  map("gD", function() jump_definition({ vsplit = true }) end)
+
+  map("gi", vim.lsp.buf.implementation)
+  map("gr", vim.lsp.buf.references)
+  map("K",  vim.lsp.buf.hover)
 end

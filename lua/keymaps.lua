@@ -8,7 +8,7 @@ vim.keymap.set({ "n", "v" }, "<leader>vv", ":e ~/.config/nvim<CR>")
 vim.keymap.set({ "n", "v", "i" }, "<D-c>", '"+y')
 vim.keymap.set({ "n", "v", "i" }, "<D-v>", '"+p')
 vim.keymap.set({ "n" }, "<leader>fp", ":Telescope find_files<CR>")
-vim.keymap.set({ "n" }, "<leader>ff", ":Telescope live_grep<CR>")
+vim.keymap.set({ "n" }, "<leader>ff", ":Telescope live_grep_args<CR>")
 
 -- NvimTree
 vim.keymap.set({ "n" }, "<leader>ee", ":NvimTreeToggle<CR>")
