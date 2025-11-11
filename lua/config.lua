@@ -185,20 +185,46 @@ require("lazy").setup({
 	}
 })
 
+local actions = require("telescope.actions")
+local lga_actions = require("telescope-live-grep-args.actions")
+
 require("telescope").setup({
   defaults = {
     path_display = { "smart" },
+
+    -- Persistent search history across sessions
+    history = {
+      path = vim.fn.stdpath("data") .. "/telescope_history.sqlite3",
+      limit = 200,
+    },
+
     mappings = {
-      i = { ["<c-d>"] = require("telescope.actions").delete_buffer, },
-      n = { ["<c-d>"] = require("telescope.actions").delete_buffer, },
+      i = {
+        ["<c-d>"] = actions.delete_buffer,     -- keep your original
+        ["<c-n>"] = actions.cycle_history_next, -- move to next history entry
+        ["<c-p>"] = actions.cycle_history_prev, -- move to previous history entry
+      },
+      n = {
+        ["<c-d>"] = actions.delete_buffer,     -- keep your original
+        ["<c-n>"] = actions.cycle_history_next,
+        ["<c-p>"] = actions.cycle_history_prev,
+      },
     },
   },
+
   extensions = {
     live_grep_args = {
-      auto_quoting = true,  -- lets you type spaces in the query; args (-g/--glob) still pass through
+      auto_quoting = true, -- allows spaces in the prompt
+      mappings = {
+        i = {
+          ["<C-k>"] = lga_actions.quote_prompt(),
+          ["<C-i>"] = lga_actions.quote_prompt_and_add_glob,
+        },
+      },
     },
   },
 })
+
 require("telescope").load_extension("live_grep_args")
 
 local lspconfig                             = require("lspconfig")
