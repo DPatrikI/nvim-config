@@ -200,7 +200,7 @@ require("telescope").setup({
 
     mappings = {
       i = {
-        ["<c-d>"] = actions.delete_buffer,     -- keep your original
+        ["<c-d>"] = actions.delete_buffer,
         ["<c-n>"] = actions.cycle_history_next, -- move to next history entry
         ["<c-p>"] = actions.cycle_history_prev, -- move to previous history entry
       },

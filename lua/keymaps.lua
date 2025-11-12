@@ -113,3 +113,17 @@ vim.keymap.set("n", "<leader>rn", function()
 end, { desc = "Rename Symbol Under Cursor" })
 
 vim.keymap.set("n", "<leader>ca", vim.lsp.buf.code_action, { desc = "LSP Code Action" })
+
+-- Copy full absolute file path
+vim.keymap.set("n", "<leader>cP", function()
+  local path = vim.fn.expand("%:p")
+  vim.fn.setreg("+", path)
+  print("📋 Copied full path: " .. path)
+end, { desc = "Copy full file path" })
+
+-- Copy relative path (relative to current working dir)
+vim.keymap.set("n", "<leader>cp", function()
+  local path = vim.fn.expand("%:.")
+  vim.fn.setreg("+", path)
+  print("📋 Copied relative path: " .. path)
+end, { desc = "Copy relative file path" })
