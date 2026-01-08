@@ -37,6 +37,7 @@ vim.opt.shiftwidth = 2     -- number of spaces to use for each step of (auto)ind
 vim.opt.expandtab = false  -- convert tabs to spaces
 vim.opt.smartindent = true -- smart autoindenting when starting a new line
 vim.o.winbar = "%f" 		-- show file path in the window bar
+vim.opt.splitright = true -- vertical splits will automatically be to the right
 
 local on_attach = require("lsp.on_attach").setup
 

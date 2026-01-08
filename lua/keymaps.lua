@@ -74,7 +74,49 @@ vim.keymap.set("n", "tn", ":tabnew<CR>", { desc = "New Tab" })
 vim.keymap.set("n", "tc", ":tabclose<CR>", { desc = "Close Tab" })
 vim.keymap.set("n", "to", ":tabonly<CR>", { desc = "Only this Tab" })
 vim.keymap.set("n", "tl", "gt", { desc = "Next Tab" })
-vim.keymap.set("n", "th", "gT", { desc = "Previous Tab" })
+vim.keymap.set("n", "th", ":tabprevious<CR>", { desc = "Previous Tab" })
+
+-- Open definition in new tab
+vim.keymap.set("n", "gT", function()
+  local params = vim.lsp.util.make_position_params()
+
+  vim.lsp.buf_request(0, "textDocument/definition", params, function(err, result)
+    if err or not result or vim.tbl_isempty(result) then
+      return
+    end
+
+    local results = result
+    if not vim.tbl_islist(results) then results = { results } end
+
+    -- Multiple defs -> quickfix (same behavior as your custom helper)
+    if #results > 1 then
+      local items = vim.lsp.util.locations_to_items(results, 0)
+      if items and #items > 0 then
+        vim.fn.setqflist({}, " ", { items = items, title = "LSP Definitions" })
+        vim.cmd("copen")
+      end
+      return
+    end
+
+    local loc = results[1]
+    local uri, range
+    if loc.targetUri then
+      uri = loc.targetUri
+      range = (loc.targetSelectionRange or loc.targetRange)
+    else
+      uri = loc.uri
+      range = loc.range
+    end
+
+    local bufnr = vim.uri_to_bufnr(uri)
+    if not vim.api.nvim_buf_is_loaded(bufnr) then vim.fn.bufload(bufnr) end
+
+    vim.cmd("tabnew")
+    vim.api.nvim_win_set_buf(0, bufnr)
+    vim.api.nvim_win_set_cursor(0, { range.start.line + 1, range.start.character })
+    vim.cmd("normal! zv")
+  end)
+end, { desc = "Definition in new tab" })
 
 vim.keymap.set("n", "<leader>gd", function()
 	local word = vim.fn.expand("<cword>")

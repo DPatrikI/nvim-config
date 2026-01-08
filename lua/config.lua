@@ -214,7 +214,7 @@ require("telescope").setup({
 
   extensions = {
     live_grep_args = {
-      auto_quoting = true, -- allows spaces in the prompt
+      auto_quoting = false, -- allows spaces in the prompt
       mappings = {
         i = {
           ["<C-k>"] = lga_actions.quote_prompt(),
