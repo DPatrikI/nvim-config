@@ -1,1 +1,3 @@
 WRN 2026-03-30T11:47:02.105 ?.51183    server_start:193: Failed to start server: operation not permitted: /var/folders/vm/k428y1y15ylbzwcwvxg8hzn80000gn/T/nvim.patrikdoczy/wYY2pA/nvim.51183.0
+WRN 2026-03-30T11:58:49.946 ?.76650    server_start:193: Failed to start server: operation not permitted: /var/folders/vm/k428y1y15ylbzwcwvxg8hzn80000gn/T/nvim.patrikdoczy/Po9dKS/nvim.76650.0
+WRN 2026-03-30T12:02:55.599 ?.84528    server_start:193: Failed to start server: operation not permitted: /var/folders/vm/k428y1y15ylbzwcwvxg8hzn80000gn/T/nvim.patrikdoczy/EfmXfk/nvim.84528.0

@@ -73,8 +73,8 @@ vim.keymap.set("n", "<C-k>", "<C-w>k")
 vim.keymap.set("n", "tn", ":tabnew<CR>", { desc = "New Tab" })
 vim.keymap.set("n", "tc", ":tabclose<CR>", { desc = "Close Tab" })
 vim.keymap.set("n", "to", ":tabonly<CR>", { desc = "Only this Tab" })
-vim.keymap.set("n", "tl", "gt", { desc = "Next Tab" })
-vim.keymap.set("n", "th", ":tabprevious<CR>", { desc = "Previous Tab" })
+vim.keymap.set("n", "L", "gt", { desc = "Next Tab" })
+vim.keymap.set("n", "H", "gT", { desc = "Previous Tab" })
 
 -- Open definition in new tab
 vim.keymap.set("n", "gT", function()
