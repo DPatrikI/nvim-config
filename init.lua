@@ -11,14 +11,13 @@ if not vim.loop.fs_stat(lazypath) then
 	})
 end
 vim.opt.rtp:prepend(lazypath)
-
 vim.opt.termguicolors = true
+vim.o.background = "dark"
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 
 require("lsp.handlers")
 require("config")
-require("lazy").setup("plugins")
 require("keymaps")
 
 vim.opt.relativenumber = true

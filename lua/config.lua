@@ -117,13 +117,14 @@ require("lazy").setup({
 	},
 
 	-- Theme
-
-	-- Example: tokyonight
 	{
-		"folke/tokyonight.nvim",
+		"rebelot/kanagawa.nvim",
 		priority = 1000,
 		config = function()
-			vim.cmd([[colorscheme tokyonight-moon]])
+			require("kanagawa").setup({
+				theme = "wave",
+			})
+			vim.cmd.colorscheme("kanagawa")
 		end,
 	},
 
