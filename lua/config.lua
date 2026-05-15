@@ -38,10 +38,36 @@ require("lazy").setup({
 		config = function()
 			require("nvim-treesitter.configs").setup({
 				-- parsers you actually use
-				ensure_installed = { "lua", "typescript", "javascript", "tsx", "html", "css", "gdscript", "gdshader", "json", "yaml", "markdown" },
+				ensure_installed = { "lua", "typescript", "javascript", "tsx", "html", "css", "gdscript", "gdshader", "json", "yaml", "markdown", "markdown_inline" },
 				highlight        = { enable = true },
 				indent           = { enable = true },
 			})
+
+			local function unwrap_capture_node(node)
+				if type(node) == "table" then
+					return node[1]
+				end
+				return node
+			end
+
+			vim.treesitter.query.add_directive("set-lang-from-info-string!", function(match, _, bufnr, pred, metadata)
+				local node = unwrap_capture_node(match[pred[2]])
+				if not node then
+					return
+				end
+
+				local injection_alias = vim.treesitter.get_node_text(node, bufnr):lower()
+				local language = vim.filetype.match({ filename = "a." .. injection_alias })
+				local aliases = {
+					ex = "elixir",
+					pl = "perl",
+					sh = "bash",
+					ts = "typescript",
+					uxn = "uxntal",
+				}
+
+				metadata["injection.language"] = language or aliases[injection_alias] or injection_alias
+			end, { force = true, all = false })
 		end,
 	},
 	-- Sticky context for Treesitter
